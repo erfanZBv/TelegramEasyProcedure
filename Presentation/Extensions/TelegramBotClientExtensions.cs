@@ -1,4 +1,6 @@
-﻿using Presentation.Controllers;
+﻿using System.Reflection;
+using Presentation.Attributes;
+using Presentation.Controllers;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -10,7 +12,7 @@ public static class TelegramBotClientExtensions
     public static void AddOnMessage(this TelegramBotClient bot)
     {
         var onMessageController = new OnMessageController(bot);
-        var onMessageMethods = OnMessageController.GetOnMessageMethods();
+        var onMessageMethods = GetOnMessageMethods();
 
         bot.OnMessage += OnMessage;
         return;
@@ -30,5 +32,24 @@ public static class TelegramBotClientExtensions
 
             await (Task)matchedMethod.Method.Invoke(onMessageController, [msg])!;
         }
+    }
+
+    private static List<OnMessageMethod> GetOnMessageMethods()
+    {
+        var methods = typeof(OnMessageController).GetMethods()
+            .Select(m => new OnMessageMethod
+            {
+                Method = m,
+                Attribute = m.GetCustomAttribute<OnMessageAttribute>()
+            })
+            .Where(m => m.Attribute != null)
+            .ToList();
+        return methods;
+    }
+
+    private class OnMessageMethod
+    {
+        public required MethodInfo Method { get; init; }
+        public OnMessageAttribute? Attribute { get; init; }
     }
 }

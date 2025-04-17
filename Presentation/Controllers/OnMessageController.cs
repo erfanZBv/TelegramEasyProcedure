@@ -52,23 +52,4 @@ public class OnMessageController(TelegramBotClient bot)
     {
         await bot.SendMessage(msg.Chat, "What?");
     }
-
-    public static List<OnMessageMethod> GetOnMessageMethods()
-    {
-        var methods = typeof(OnMessageController).GetMethods()
-            .Select(m => new OnMessageMethod
-            {
-                Method = m,
-                Attribute = m.GetCustomAttribute<OnMessageAttribute>()
-            })
-            .Where(m => m.Attribute != null)
-            .ToList();
-        return methods;
-    }
-}
-
-public class OnMessageMethod
-{
-    public required MethodInfo Method { get; set; }
-    public OnMessageAttribute? Attribute { get; set; }
 }
