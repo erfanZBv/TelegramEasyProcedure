@@ -1,5 +1,6 @@
 ﻿using EasyProcedure.Contracts;
 using EasyProcedure.Core;
+using EasyProcedure.Helpers;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 

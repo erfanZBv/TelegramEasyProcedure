@@ -1,10 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using EasyProcedure.Contracts;
-using EasyProcedure.RenderModels;
+using EasyProcedure.Core;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
-namespace EasyProcedure.Core;
+namespace EasyProcedure.Contracts;
 
 public interface IProcedureManager
 {

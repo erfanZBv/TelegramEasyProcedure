@@ -1,8 +1,9 @@
 ﻿using System.Text.RegularExpressions;
+using EasyProcedure.Core;
 using EasyProcedure.Exceptions;
 using EasyProcedure.JsonModels;
 
-namespace EasyProcedure.Core;
+namespace EasyProcedure.Helpers;
 
 internal class BotConfigValidator(BotConfigJsonModel config)
 {

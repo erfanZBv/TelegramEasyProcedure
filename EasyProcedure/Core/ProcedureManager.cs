@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using EasyProcedure.Contracts;
 using EasyProcedure.Exceptions;
+using EasyProcedure.Helpers;
 using EasyProcedure.JsonModels;
 using EasyProcedure.RenderModels;
 using Telegram.Bot;
@@ -24,21 +25,6 @@ public class ProcedureManager : IProcedureManager
         _supportedLanguages = jsonModel.SupportedLanguages;
 
         RenderFromJson(jsonModel);
-    }
-
-    private void RenderFromJson(BotConfigJsonModel jsonModel)
-    {
-        var renderedProceduresList = Mapper.ToRenderedProcedures(jsonModel);
-        var renderedStagesList = renderedProceduresList.SelectMany(x => x.Stages).ToList();
-        var renderedOptionsList = renderedStagesList
-            .SelectMany(x => x.OptionMarkup.SelectMany(y => y));
-
-        _renderedStages = new Dictionary<string, Stage>(
-            renderedStagesList.Select(x => new KeyValuePair<string, Stage>(x.DictionaryKey, x))
-        );
-        _renderedOptions = new Dictionary<string, Option>(
-            renderedOptionsList.Select(x => new KeyValuePair<string, Option>(x.DictionaryKey, x))
-        );
     }
 
     public Task OnUpdate(Update update)
@@ -75,6 +61,21 @@ public class ProcedureManager : IProcedureManager
     }
 
     #region private methods
+
+    private void RenderFromJson(BotConfigJsonModel jsonModel)
+    {
+        var renderedProceduresList = Mapper.ToRenderedProcedures(jsonModel);
+        var renderedStagesList = renderedProceduresList.SelectMany(x => x.Stages).ToList();
+        var renderedOptionsList = renderedStagesList
+            .SelectMany(x => x.OptionMarkup.SelectMany(y => y));
+
+        _renderedStages = new Dictionary<string, Stage>(
+            renderedStagesList.Select(x => new KeyValuePair<string, Stage>(x.DictionaryKey, x))
+        );
+        _renderedOptions = new Dictionary<string, Option>(
+            renderedOptionsList.Select(x => new KeyValuePair<string, Option>(x.DictionaryKey, x))
+        );
+    }
 
     private bool TryExtractCallbackData(
         Update update,

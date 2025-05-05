@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 using EasyProcedure.Exceptions;
 using EasyProcedure.JsonModels;
 
-namespace EasyProcedure.Core;
+namespace EasyProcedure.Helpers;
 
 internal class JsonParser
 {

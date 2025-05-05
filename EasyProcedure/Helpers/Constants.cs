@@ -1,4 +1,4 @@
-﻿namespace EasyProcedure.Core;
+﻿namespace EasyProcedure.Helpers;
 
 public class Constants
 {

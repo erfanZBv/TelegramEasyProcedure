@@ -3,7 +3,7 @@ using EasyProcedure.RenderModels;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace EasyProcedure.Core;
+namespace EasyProcedure.Helpers;
 
 internal static class Mapper
 {
