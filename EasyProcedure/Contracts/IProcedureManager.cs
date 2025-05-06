@@ -14,7 +14,7 @@ public interface IProcedureManager
         [MaybeNullWhen(false)] out IStageMessage renderedStage
     );
 
-    ProcedureManager AddOptionOnClick(
+    ProcedureManager SetOptionOnClick(
         string procedureId, string stageId, string optionId,
         Func<TelegramBotClient, Update, OptionOnClickDetails, Task<OptionHandlerResult>> onClick
     );

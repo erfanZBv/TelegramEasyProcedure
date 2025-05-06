@@ -46,7 +46,7 @@ public class ProcedureManager : IProcedureManager
         return tryResult;
     }
 
-    public ProcedureManager AddOptionOnClick(
+    public ProcedureManager SetOptionOnClick(
         string procedureId, string stageId, string optionId,
         Func<TelegramBotClient, Update, OptionOnClickDetails, Task<OptionHandlerResult>> onClick
     )
