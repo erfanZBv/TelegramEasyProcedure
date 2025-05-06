@@ -8,6 +8,6 @@ var bot = BotConfigurationHelper.CreateClient(cts.Token);
 await bot.DeleteWebhook();
 await bot.DropPendingUpdates();
 
-bot.AddOnMessage();
+bot.AddEvents();
 
 await BotConfigurationHelper.StopOnKeyStroke(bot, ConsoleKey.Q, cts);

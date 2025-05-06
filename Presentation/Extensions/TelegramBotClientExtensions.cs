@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using EasyProcedure.Core;
 using Presentation.Attributes;
 using Presentation.Controllers;
 using Telegram.Bot;
@@ -9,9 +10,17 @@ namespace Presentation.Extensions;
 
 public static class TelegramBotClientExtensions
 {
-    public static void AddOnMessage(this TelegramBotClient bot)
+    public static void AddEvents(this TelegramBotClient bot)
     {
-        var onMessageController = new OnMessageController(bot);
+        var procedureManager = bot.CreateProcedureManager();
+
+        bot.AddOnMessage(procedureManager);
+        bot.AddOnUpdate(procedureManager);
+    }
+
+    public static void AddOnMessage(this TelegramBotClient bot, ProcedureManager procedureManager)
+    {
+        var onMessageController = new OnMessageController(bot, procedureManager);
         var onMessageMethods = GetOnMessageMethods();
 
         bot.OnMessage += OnMessage;
@@ -34,6 +43,44 @@ public static class TelegramBotClientExtensions
         }
     }
 
+    public static void AddOnUpdate(this TelegramBotClient bot, ProcedureManager procedureManager)
+    {
+        AddOptionOnClicks(procedureManager);
+        bot.OnUpdate += procedureManager.OnUpdate;
+    }
+
+    # region private
+
+    private static ProcedureManager CreateProcedureManager(this TelegramBotClient bot)
+    {
+        var json = File.ReadAllText("./botconfig.json");
+        return new ProcedureManager(bot, json);
+    }
+
+    private static void AddOptionOnClicks(ProcedureManager procedureManager)
+    {
+        var controllerType = typeof(OnOptionClickController);
+        var methods =
+            controllerType.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly);
+
+        var controllerInstance = new OnOptionClickController();
+
+        foreach (var method in methods)
+        {
+            var attr = method.GetCustomAttribute<OnOptionClickAttribute>();
+            if (attr == null) continue;
+
+            var del = (Func<TelegramBotClient, Update, OptionOnClickDetails, Task<OptionHandlerResult>>)
+                Delegate.CreateDelegate(
+                    typeof(Func<TelegramBotClient, Update, OptionOnClickDetails, Task<OptionHandlerResult>>),
+                    controllerInstance,
+                    method
+                );
+
+            procedureManager.SetOptionOnClick(attr.ProcedureId, attr.StageId, attr.OptionId, del);
+        }
+    }
+
     private static List<OnMessageMethod> GetOnMessageMethods()
     {
         var methods = typeof(OnMessageController).GetMethods()
@@ -52,4 +99,6 @@ public static class TelegramBotClientExtensions
         public required MethodInfo Method { get; init; }
         public OnMessageAttribute? Attribute { get; init; }
     }
+
+    #endregion
 }

@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+﻿using EasyProcedure.Core;
 using Presentation.Attributes;
 using Telegram.Bot;
 using Telegram.Bot.Types;
@@ -7,7 +7,7 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace Presentation.Controllers;
 
-public class OnMessageController(TelegramBotClient bot)
+public class OnMessageController(TelegramBotClient bot, ProcedureManager procedureManager)
 {
     [OnMessage("/start")]
     public async Task HandleStartCommand(Message msg)
@@ -23,21 +23,31 @@ public class OnMessageController(TelegramBotClient bot)
     [OnMessage("/start_English")]
     public async Task HandleStartEnglishCommand(Message msg)
     {
-        await bot.SendMessage(msg.Chat, """
-                                        <b>Hi!</b>
-                                        Welcome to Quran bot...
-                                        """, parseMode: ParseMode.Html, linkPreviewOptions: true,
-            replyMarkup: new ReplyKeyboardRemove());
+        const string language = "english";
+        if (!procedureManager.TryGetStageMessage("0", "0", language, out var stageMessage))
+            return;
+
+        await bot.SendMessage(
+            msg.Chat,
+            stageMessage.MultilanguageText[language],
+            parseMode: stageMessage.TextParseMode,
+            replyMarkup: stageMessage.MultilanguageReplyMarkup?[language]
+        );
     }
 
     [OnMessage("/start_Farsi")]
     public async Task HandleStartPersianCommand(Message msg)
     {
-        await bot.SendMessage(msg.Chat, """
-                                        <b>سلام!</b>
-                                        به بات قرآن خوش آمدید...
-                                        """, parseMode: ParseMode.Html, linkPreviewOptions: true,
-            replyMarkup: new ReplyKeyboardRemove());
+        const string language = "farsi";
+        if (!procedureManager.TryGetStageMessage("0", "0", language, out var stageMessage))
+            return;
+
+        await bot.SendMessage(
+            msg.Chat,
+            stageMessage.MultilanguageText[language],
+            parseMode: stageMessage.TextParseMode,
+            replyMarkup: stageMessage.MultilanguageReplyMarkup?[language]
+        );
     }
 
     public void InitialHandle(Message msg, UpdateType type)

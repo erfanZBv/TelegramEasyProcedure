@@ -11,10 +11,17 @@
         <None Update="appsettings*.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Update="botconfig*.json">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Telegram.Bot" Version="22.4.4"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\EasyProcedure\EasyProcedure.csproj" />
     </ItemGroup>
 
 </Project>

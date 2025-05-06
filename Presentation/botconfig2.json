@@ -1,0 +1,132 @@
+{
+  "supportedLanguages": [
+    "english",
+    "farsi"
+  ],
+  "procedures": [
+    // we only have 1 callback procedure for now, which will be started via "/start_<lang>" commands
+    {
+      "id": 0,
+      // title keys are optional and they are for description purposes
+      "title": "Quran",
+      "rootStageId": 0,
+      "addToRootButton": true,
+      "addToPreviousButton": true,
+      "toRootButtonId": -2,
+      "toPreviousButtonId": -1,
+      "stages": [
+        {
+          "id": 0,
+          "title": "Quran root stage",
+          "removeToRootButton": true,
+          "removeToPreviousButton": true,
+          // as we have set removeToPreviousButton to true, "previousStageId" key is not required for this stage
+          "text": {
+            "english": "Welcome to Quran bot...",
+            "farsi": "به بات قرآن خوش آمدید..."
+          },
+          "options": [
+            [
+              {
+                "id": 0,
+                "buttonId": 1,
+                "nextStageId": 1
+              },
+              {
+                // this option does not have "nextStageId" because it's a leaf button and does not have any child node and maybe when it's clicked a C# method will be called
+                // in C# code we will be able to add a method to option by specifying it via Ids e.g. procedureId == 1 && stageId == 0 && optionId == 2
+                // if a method is linked to an option and that option has nextStageId too, this will be the sequence: 1. execute method 2. go to next stage 
+                "id": 2,
+                "buttonId": 2
+              }
+            ],
+            [
+              {
+                "id": 3,
+                "buttonId": 3,
+                "nextStageId": 2
+              }
+            ]
+          ]
+        },
+        {
+          "id": 1,
+          "title": "'Continue' stage (this stage is not a real-world stage, but is an example idea of a stage's json code!)",
+          "previousStageId": 0,
+          // navigate to stage 0 when "To Previous Stage" button is clicked
+          "text": {
+            "english": "This stage is here because 'Continue' button's nextStageId is 1. All dynamic! With no redundant code.",
+            "farsi": "این استیج اینجاست چون NextStageId دکمه 'ادامه' 1 است. همه ش پویا و خودکار! بدون هیچ کد اضافه ای."
+          },
+          "options": [
+            [
+              {
+                "id": 1,
+                "buttonId": 3,
+                "nextStageId": 3
+              }
+            ]
+          ]
+        },
+        {
+          "id": 2,
+          "title": "Another stage! (1)",
+          "previousStageId": 0,
+          "text": {
+            "english": "This is another stage! (1)",
+            "farsi": "اینم یه استیج دیگه ست! (۱)"
+          }
+          // no option (so only default options are displayed for this stage which are "To Previous Stage" and "To Root Stage" buttons)
+        },
+        {
+          "id": 3,
+          "title": "Another stage! (2)",
+          "previousStageId": 1,
+          "text": {
+            "english": "This is another stage! (2)",
+            "farsi": "اینم یه استیج دیگه ست! (۲)"
+          }
+        }
+      ]
+    }
+  ],
+  "buttons": [
+    {
+      "id": -2,
+      "title": "To Root Stage",
+      "text": {
+        "english": "🏠",
+        "farsi": "🏠"
+      }
+    },
+    {
+      "id": -1,
+      "title": "To Previous Stage",
+      "text": {
+        "english": "🔙",
+        "farsi": "🔙"
+      }
+    },
+    {
+      "id": 1,
+      "text": {
+        "english": "Continue",
+        "farsi": "ادامه"
+      }
+    },
+    {
+      "id": 2,
+      "text": {
+        "english": "Cancel",
+        "farsi": "لغو"
+      }
+    },
+    {
+      "id": 3,
+      "text": {
+        "english": "Another Button!",
+        "farsi": "یه دکمه دیگه!"
+      }
+    }
+  ]
+}
