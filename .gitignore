@@ -507,3 +507,4 @@ $RECYCLE.BIN/
 **/.idea/**/contentModel.xml
 **/.idea/**/modules.xml
 **/.idea/**/CSharpierPlugin.xml
+.idea
